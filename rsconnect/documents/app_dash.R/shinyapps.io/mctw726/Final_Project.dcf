@@ -1,0 +1,14 @@
+name: Final_Project
+title: Final_Project
+username:
+account: mctw726
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9233732
+bundleId: 7297405
+url: https://mctw726.shinyapps.io/Final_Project/
+when: 1685720773.05901
+lastSyncTime: 1685720773.05902
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 1_data_cleaning.R|1_data_exploration_2.R|1_data_exploration.R|Williams_Madeleine_Progress_Memo.html|Williams_Madeleine_Progress_Memo.qmd

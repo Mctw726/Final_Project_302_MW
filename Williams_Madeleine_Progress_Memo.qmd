@@ -1,0 +1,127 @@
+---
+title: "Final Project Progress Memo"
+subtitle: "US Police Killings"
+author: "Madeleine Williams"
+date: "May 21, 2023"
+format: 
+  html:
+    toc: true
+    embed-resources: true
+    code-fold: show
+    link-external-newwindow: true
+execute: 
+  warning: false
+editor: visual
+---
+
+## Data Source
+
+I am planning on using the data set police_killings, which was created by FiveThirtyEight. This data features information taken from the US census tract as well as [Guardian's database on police killings](http://www.theguardian.com/us-news/ng-interactive/2015/jun/01/the-counted-map-us-police-killings) to census data from the American Community Survey. For the project I am using the 2015 data which includes police killings from the first five months of the year (January to May). In that time span, there were 467 killings. We must note that some caution needs to be taken as this is only data for people who died, there are still many more shootings and unnecessary police brutality where the person survived. Additionally, not all the cases here can be characterized as excessive polcie brutality, as some f.ex Vincent Cordaro both tried to kill the police officers and members of his family.
+
+This dataset includes information such as the race/ethnicity of the victims, age, poverty rates of the neighborhood, whether they were armed or not, and more information that can allow for a very interesting analysis and comparisons. This data set originally included 467 observations and 34 variables.
+
+### **Here is the link to my data:**
+
+[Link to raw data](https://raw.githubusercontent.com/fivethirtyeight/data/master/police-killings/police_killings.csv)
+
+[Link to data source](https://github.com/fivethirtyeight/data/blob/master/police-killings/police_killings.csv)
+
+## **Why this data?**
+
+Firstly, police violence has and continues to be a major issue in the United States. As a black women, I know that I am at greater risk of experiencing it or of having family members experience it. I think it is extremely important to be educated on the history of the US police system as well as real world repercussions of the system. Through this data analysis I hope to learn more about police killings, see if there are any patterns (such as whether it is more common in a poorer area than a richer area), and see if it affirms what I have known about police killings, or if I will discover something new and or different.
+
+## Loading Data
+
+```{r, eval = FALSE}
+#| label: load-data
+
+#Load packages 
+library(readr)
+
+police_killings <- read_csv("data/raw/police_killings.csv") %>% 
+  janitor::clean_names()
+
+
+```
+
+## Cleaning Process
+
+I uploaded my data into a raw folder inside of my data folder, and once I finished my cleaning process, I exported the clean csv into a processed folder.
+
+Here is the cleaning I did:
+
+```{r, eval = FALSE}
+#| label: data-cleaning
+
+#load packages
+library(readr)
+library(naniar)
+library(knitr)
+
+#Skim the data -------------------------------------------------------
+skim_without_charts(police_killings)
+
+#More indepth to missingness------------------------------------------
+police_killings_missing_table <- police_killings %>% 
+  miss_var_summary() %>% 
+  kable()
+
+#Missingness exploration in observations------------------------------
+police_killings_filtered <- police_killings %>%
+  mutate(row_number = row_number()) %>%
+  mutate(total_missing = rowSums(is.na(.)),
+         missingness_percentage = total_missing / ncol(.)) %>%
+  filter(total_missing > 0) %>%
+  select(observation = row_number, total_missing, missingness_percentage)
+
+# Print the filtered data frame
+print(police_killings_filtered)
+
+#Remove the two observations with high missiningness -----------------
+police_killings <- police_killings[-c(183, 379), ]
+
+#Variable Type Conversion:  ------------------------------------------
+police_killings <- police_killings %>% 
+  #turn pov numeric
+  mutate(pov = as.numeric(pov)) %>% 
+  #turn age numeric
+  mutate(age = as.numeric(pov)) %>% 
+  #turn share of populations numeric
+  mutate(share_white = as.numeric(share_white)) %>% 
+  mutate(share_hispanic = as.numeric(share_hispanic)) %>% 
+  mutate(share_black = as.numeric(share_black)) %>% 
+  #turn income into numeric
+  mutate(p_income = as.numeric(p_income)) 
+
+#Save out cleaned data ------------------------------------------------
+write.csv(police_killings, file = "data/processed/police_killings_clean.csv", row.names = FALSE)
+
+
+```
+
+For my cleaning process, I did an initial skim, which alerted me of some missingness and some variables that might be the wrong type, at this stage there are 467 observations, 17 character variables and 17 numeric variables.The skim also helped me see that there were no concerning outliers.
+
+I then looked more specifically at the missingness in each variable; county_bucket and streetadress had the highest amount, and some that I needed to turn into numeric data such as pov. I then looked at the observations to see if any were in charge of a lot of the missingness; I found that observations 183 and 379 had high missingess, specifically in columns of interest such as poverty rate, college education, etc. I decided to remove them as they would not let me do a complete analysis.
+
+After I removed them, most of the columns with missingness other than county_bucket and streetadress were now complete. This allowed me to recode the variables that were characters, but that should have been numeric, pov, age, share_white, share_black, share_hispanic, and p_income.
+
+I then saved my cleaned data to the processed data folder, we now have 465 observations, 11 character variables and 23 numeric.
+
+## **Visualization plan**
+
+As this data set includes long and lat information, I am planning on creating an interactive map with Shiny where we can see killings by state or race. I am also hoping to have some visualizations that show the distribution of killings by race, age, gender, etc. So far, I have created some plots to get a better idea of what data can produce, as well as visualize some of the demographic information. See below the preliminary plots.
+
+**Figure \[1\]: Age Distribution of People killed by Race**
+
+![](images/3033b470-953b-4bf3-804c-24a8b3b738e0.png){width="742"}
+
+**Figure \[2\]: Police killings by Race**
+
+![](images/8f3ebae2-c18b-4f6a-9cd1-1bd3e151b47e.png){width="614"}
+
+While this memo is not for analysis purposes, we can see that White and Asian / pacific islanders have a younger averages of the people killed by police, whereas native Americans and black individuals less so.
+
+\
+Additionally, we see that while white individuals made up the highest amount of people killed, we know that white people make up a much larger portion of the population than the other groups. We easily see that all other groups are being disproportionately killed, we see that Black people make up a little over 50% of killings compared to white individuals but represent under 15% of the US population.
+
+I look forward to continuing my analysis and seeing what else I will uncover.
