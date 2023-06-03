@@ -217,35 +217,52 @@ ui <- (
                             graphs on the dashboard. As a whole the dashboard was created to serve as an introduction to the dataset and also attempt to answer common thoughts around who tends to be killed
                             by the police.
                             "
+                            ),
+                            br(),
+                              h4(strong("Map")),
+                              p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
+                            which you can easily toggle between. I also added in other layers where you can explore which states have the highest number of people killed
+                            by police and also a layer (which in my opinon is more intersting), that took in an outisde dataset to examine the states poverty rate compared
+                            the averge poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people killed
+                            in that state tended to be from poorer areas than the states average. Put together you can see if certain races have been killed more in certain states 
+                            than others, or if they tend to be killed in states where they might be from poorer areas than the state's average. I orginally wanted to merge the table on the 
+                            dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through groupping).
+                            "
                          
                               ),
+                            br(),
+                            h4(strong("Final Words")),
+                            p("If you look into the actual code, you will see I have some commented out, I kept it in, as I might want to revisit some of the features I did not implement in at a later date and wanted to keep the code.
+                              I hope you have enjoyed my app!
+                            
+                            "),
                             # What is the core concept(s) or insight(s) into the data that you believe the visualization communicates? 
                             #   If you choose to include animation then explain why animation helps. 
                             # If you build an app then explain your choice of widgets and what about the data it help users understand
                             hr()
                           )),
-                        fluidRow(
-                          # width = '100%',
-                          box(
-                            title = p(icon("info-circle"), "Additional Information"),
-                            # Source
-                            h4(strong("Map")),
-                            p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
-                            which you can easily toggle between. I also added in other layers where you can explore which states have the highest number of people killed
-                            by police and also a layer (which in my opinon is more intersting), that took in an outisde dataset to exmine the states poverty rate compared
-                            the averge poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people killed
-                            in that state tended to be from poorer areas than the states average. Put together you can see if certain races have been killed more in certain states 
-                            than others, or if they tend to be killed in states where they might be from poorer areas than the state's average. I orginally wanted to merge the table on the 
-                            dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through groupping).
-                            I hope you have enjoyed my app!
-                            "
-                              
-                            ),
-                            # What is the core concept(s) or insight(s) into the data that you believe the visualization communicates? 
-                            #   If you choose to include animation then explain why animation helps. 
-                            # If you build an app then explain your choice of widgets and what about the data it help users understand
-                            hr()
-                          ))
+                        # fluidRow(
+                        #   # width = '100%',
+                        #   box(
+                        #     title = p(icon("info-circle"), "Additional Information"),
+                        #     # Source
+                        #     h4(strong("Map")),
+                        #     p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
+                        #     which you can easily toggle between. I also added in other layers where you can explore which states have the highest number of people killed
+                        #     by police and also a layer (which in my opinon is more intersting), that took in an outisde dataset to exmine the states poverty rate compared
+                        #     the averge poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people killed
+                        #     in that state tended to be from poorer areas than the states average. Put together you can see if certain races have been killed more in certain states 
+                        #     than others, or if they tend to be killed in states where they might be from poorer areas than the state's average. I orginally wanted to merge the table on the 
+                        #     dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through groupping).
+                        #     I hope you have enjoyed my app!
+                        #     "
+                        #       
+                        #     ),
+                        #     # What is the core concept(s) or insight(s) into the data that you believe the visualization communicates? 
+                        #     #   If you choose to include animation then explain why animation helps. 
+                        #     # If you build an app then explain your choice of widgets and what about the data it help users understand
+                        #     hr()
+                        #   ))
                         # )
                       )
                     ),# End about tab
