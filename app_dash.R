@@ -177,19 +177,19 @@ ui <- (
                           p(strong("Email: "), a("madeleinewilliams2025@u.northwestern.edu", href = "mailtoR:madeleinewilliams2025@u.northwestern.edu")),
                           hr(),     
                           # title = p(icon("info-circle"), "About"),
-                          
+                      
                           h4("Github Repo"),
                           p("Please access my full code on my github repo", 
                             a("here:", 
                               href = "https://github.com/Mctw726/Final_Project_302_MW"),
                             "."),
                           h4("Published Link"),
-                          p("Please view access to the app (via posit account)", 
+                          p("View published app", 
                             a("here:", 
-                              href = "https://posit.cloud/content/6061589"),
+                              href = "https://mctw726.shinyapps.io/Final_Project/"),
                             "."),
                           hr(),   
-                          br(),
+   
                           h4(strong("Source")),
                           p("The Data was sourced from FiveThirtyEight", 
                             a("Police Killings 2015", 
@@ -218,27 +218,28 @@ ui <- (
                           title = p(icon("info-circle"), "Additional Information"),
                           # Source
                           h4(strong("Dashboard")),
-                          p("The point of the dashboard is to provide information on the killings done by the police from 01/01/2015 to 01/06/2015.
-                            The first portion of the dashboard are the value boxes, the goal of these is to provide key facts about the dataset and set up the viewer
-                            with some information. The second portion of the dashboard is the dataset itself which is scrollable across the colums, the goal of this was
-                            to give access to viewers of the whole picture as my plots do not touch on each variable. The map on the dashboard represents the concentration of 
-                            where the deaths took place, and if you press on play it hilights which happened which month. To note, I was unable to get the months to play in order despite
-                            my hardest effort, so they showcase the deaths in a non chronological monthly order. Finally, at the bottom I utilzed a widget to change through poverty, 
-                            personal income of the deceased and population of the county where they were from all compared to their racial/ethnic information. The goal was to see if patterns appear.
-                            Are the Black people who are killed of lower socioeconomic means? Do all people killed by the police live in counties with high poverty rates? I invite you to look at the 
-                            graphs on the dashboard. As a whole the dashboard was created to serve as an introduction to the dataset and also attempt to answer common thoughts around who tends to be killed
-                            by the police.
+                          p("The point of the dashboard is to provide information on the killings done by the police from 01/01/2015 to 01/06/2015. 
+                          The first portion of the dashboard is the value boxes; the goal is to provide key facts about the dataset and set up the viewer 
+                          with some information. The second portion of the dashboard is the dataset itself which is scrollable across the columns; 
+                          the goal of this was to give access to viewers of the whole picture, as my plots do not touch on each variable. 
+                          The map on the dashboard represents the concentration of where the deaths took place, and if you press on play, it highlights
+                          which happened in which month. I was unable to get the months to play in order despite my most strenuous effort, so they 
+                          showcase the deaths in a nonchronological monthly order. Finally, at the bottom, I utilized a widget to change through poverty, 
+                          personal income of the deceased, and the population of the county where they were from, all compared to their racial/ethnic information. 
+                          The goal was to see if patterns appeared. Are the Black people who are killed of lower socioeconomic means? Do all people killed by the 
+                          police live in counties with high poverty rates? I invite you to look at the graphs on the dashboard. The dashboard was created to
+                          serve as an introduction to the dataset and also attempt to answer common thoughts about who tends to be killed by the police.
                             "
                           ),
                           br(),
                           h4(strong("Map")),
-                          p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
-                            which you can easily toggle between. I also added in other layers where you can explore which states have the highest number of people killed
-                            by police and also a layer (which in my opinon is more intersting), that took in an outisde dataset to examine the states poverty rate compared
-                            the averge poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people killed
-                            in that state tended to be from poorer areas than the states average. Put together you can see if certain races have been killed more in certain states 
-                            than others, or if they tend to be killed in states where they might be from poorer areas than the state's average. I orginally wanted to merge the table on the 
-                            dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through groupping).
+                          p("I created a map that has a multitude of functions. The first is that it showcases the locations of the deceased based on their race, 
+                            which you can easily toggle between. I also added other layers where you could explore which states have the highest number of people killed
+                            by police and also a layer (which, in my opinion, is more interesting) that took in an outside dataset to examine the state's poverty rate compared
+                            to the average poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people that died
+                            in that state tended to be from poorer areas than the state's average. Put together; you can see if certain races have been killed more in certain states
+                            than others or if they tend to be lower income than their state's average. I originally wanted to merge the table on the 
+                            dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through grouping).
                             "
                             
                           ),
@@ -456,7 +457,7 @@ server <- (function(input, output, session) {
       summarise(count = n()) %>%
       arrange(desc(count)) 
     
-    valueBox("is the month were the most people were killed by the police",
+    valueBox("is the month when the most people were killed by the police between Jan-Jun 2015",
              value = "March",
              color = "blue")
   })

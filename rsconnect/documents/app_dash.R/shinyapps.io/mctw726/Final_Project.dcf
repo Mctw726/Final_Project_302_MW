@@ -5,10 +5,10 @@ account: mctw726
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9233732
-bundleId: 7297405
+bundleId: 7304613
 url: https://mctw726.shinyapps.io/Final_Project/
-when: 1685720773.05901
-lastSyncTime: 1685720773.05902
+when: 1685937466.91141
+lastSyncTime: 1685937466.91143
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: 1_data_cleaning.R|1_data_exploration_2.R|1_data_exploration.R|Williams_Madeleine_Progress_Memo.html|Williams_Madeleine_Progress_Memo.qmd
+ignoredFiles: 1_data_cleaning.R|1_data_exploration_2.R|1_data_exploration.R|README.md|Williams_Madeleine_Progress_Memo.html|Williams_Madeleine_Progress_Memo.qmd|final_project_MW_302|maps
