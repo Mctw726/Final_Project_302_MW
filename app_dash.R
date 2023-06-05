@@ -8,6 +8,7 @@ library(leaflet.minicharts)
 library(DT)
 library(htmltools)
 library(janitor)
+library(sf)
 
 #Load in Data  --------------------------------------------------------------------------------------
 police_killings <- read_csv("data/processed/police_killings_clean.csv") %>% 
@@ -38,6 +39,7 @@ state_2$pov_real <- as.numeric(state_2$pov_real)
 
 ##Are lower income neighbrohoods targetied?
 # Create a new column "Difference" with the difference between two columns
+state_2 <- st_as_sf(state_2, wkt = "geometry")
 state_2$difference <- as.numeric(state_2$pov_real) - as.numeric(state_2$pov_avg)
 state_2$perc_difference <- (as.numeric(state_2$pov_real) - as.numeric(state_2$pov_avg)) / as.numeric(state_2$pov_avg) * 100
 state_2 <- full_join(state_2, state_list)
@@ -100,7 +102,7 @@ ui <- (
                 
                 # Body ----------------------------------------------------------------------------------------
                 dashboardBody(
-                    # Dashboard ----------------------------------------------------------------------------------------
+                  # Dashboard ----------------------------------------------------------------------------------------
                   tabItems(
                     # Start main dashboard
                     tabItem(
@@ -112,36 +114,36 @@ ui <- (
                       #                   animate = animationOptions())
                       #   ),
                       box(
-                      # fluidPage(
-                      fluidRow(
-                        valueBoxOutput("unarmed_count"),
-                        valueBoxOutput("month_count"),
-                        valueBoxOutput("death_count")
-                      ),
-                      fluidRow(
-                        width = 6,
-                            height = 470,
-                            leafletOutput("mymap")
+                        # fluidPage(
+                        fluidRow(
+                          valueBoxOutput("unarmed_count"),
+                          valueBoxOutput("month_count"),
+                          valueBoxOutput("death_count")
                         ),
-                      fluidRow(
-                        # titlePanel("Demographics by Race"),
+                        fluidRow(
+                          width = 6,
+                          height = 470,
+                          leafletOutput("mymap")
+                        ),
+                        fluidRow(
+                          # titlePanel("Demographics by Race"),
+                          
+                          box(
+                            # width = 12,
+                            #   sliderInput("plot.age", label = "Age", min = 1, max = 100,
+                            #               value = c(1,100)), round = TRUE, step = 1,
+                            #               animate = animationOptions())
+                            selectInput("var",
+                                        label = "Choose a variable to display with Racial Demographics",
+                                        choices = list("Poverty" = "pov",
+                                                       "Income" = "p_income", 
+                                                       "Population" = "pop"),
+                                        selected = "pop")
+                          )
+                        ),
                         
-                        box(
-                          # width = 12,
-                          #   sliderInput("plot.age", label = "Age", min = 1, max = 100,
-                          #               value = c(1,100)), round = TRUE, step = 1,
-                          #               animate = animationOptions())
-                        selectInput("var",
-                                    label = "Choose a variable to display with Racial Demographics",
-                                    choices = list("Poverty" = "pov",
-                                                   "Income" = "p_income", 
-                                                   "Population" = "pop"),
-                                    selected = "pop")
-                        )
-                        ),
-                   
-                      fluidRow(
-                        # tabBox(
+                        fluidRow(
+                          # tabBox(
                           height = 470,
                           side = "left",
                           # tabPanel("Full",
@@ -151,16 +153,16 @@ ui <- (
                           tabPanel("Demographics",
                                    plotOutput("race_density"))
                           
-                      # )
-                      )),
+                          # )
+                        )),
                       # fluidPage(
                       box(
                         # fluidRow(
-                          DTOutput(outputId = "table")                           
+                        DTOutput(outputId = "table")                           
                         # ),
                       )
-                        
-                      ),
+                      
+                    ),
                     # About ----------------------------------------------------------------------------------------
                     
                     # Start about tab
@@ -168,16 +170,26 @@ ui <- (
                       tabName = "about",
                       fluidRow(
                         box(
-                          title = p(icon("address-card"),"Contact"),
+                          title = p(icon("info-circle"), "About"),
                           h3("Madeleine Williams"),
                           h4("Data Science Student - STAT 302"),
                           br(),
                           p(strong("Email: "), a("madeleinewilliams2025@u.northwestern.edu", href = "mailtoR:madeleinewilliams2025@u.northwestern.edu")),
-                          hr()
-                        ),
-                        box(
-                          title = p(icon("info-circle"), "About"),
-                          # Source
+                          hr(),     
+                          # title = p(icon("info-circle"), "About"),
+                          
+                          h4("Github Repo"),
+                          p("Please access my full code on my github repo", 
+                            a("here:", 
+                              href = "https://github.com/Mctw726/Final_Project_302_MW"),
+                            "."),
+                          h4("Published Link"),
+                          p("Please view access to the app (via posit account)", 
+                            a("here:", 
+                              href = "https://posit.cloud/content/6061589"),
+                            "."),
+                          hr(),   
+                          br(),
                           h4(strong("Source")),
                           p("The Data was sourced from FiveThirtyEight", 
                             a("Police Killings 2015", 
@@ -191,22 +203,22 @@ ui <- (
                             a("State Polynominal Information", 
                               href = "https://rstudio.github.io/leaflet/json/us-states.geojson"),
                             "."),
-       
+                          
                           br(),
                           # What is it for
                           h4(strong("Content Warning")),
                           p(
                             "These visualiztions cover a senitive topic and may not be apporiate for all viewers. Trigger warning: violence, guns, death, police"
-                          )), 
-                          br(),
-                          # hr(),
-                        fluidRow(
-                          # width = '100%',
-                          box(
-                            title = p(icon("info-circle"), "Additional Information"),
-                            # Source
-                            h4(strong("Dashboard")),
-                            p("The point of the dashboard is to provide information on the killings done by the police from 01/01/2015 to 01/06/2015.
+                          )
+                          
+                        ),
+                        br(),
+                        fluidPage(
+                        box(
+                          title = p(icon("info-circle"), "Additional Information"),
+                          # Source
+                          h4(strong("Dashboard")),
+                          p("The point of the dashboard is to provide information on the killings done by the police from 01/01/2015 to 01/06/2015.
                             The first portion of the dashboard are the value boxes, the goal of these is to provide key facts about the dataset and set up the viewer
                             with some information. The second portion of the dashboard is the dataset itself which is scrollable across the colums, the goal of this was
                             to give access to viewers of the whole picture as my plots do not touch on each variable. The map on the dashboard represents the concentration of 
@@ -217,10 +229,10 @@ ui <- (
                             graphs on the dashboard. As a whole the dashboard was created to serve as an introduction to the dataset and also attempt to answer common thoughts around who tends to be killed
                             by the police.
                             "
-                            ),
-                            br(),
-                              h4(strong("Map")),
-                              p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
+                          ),
+                          br(),
+                          h4(strong("Map")),
+                          p("I created a map that has a multitude of functions. The first being that it showcases the locations of the deceased based on their race, 
                             which you can easily toggle between. I also added in other layers where you can explore which states have the highest number of people killed
                             by police and also a layer (which in my opinon is more intersting), that took in an outisde dataset to examine the states poverty rate compared
                             the averge poverty rates of the counties where people were killed by the police. A lighter red state (as the legend shows) means that the people killed
@@ -228,19 +240,23 @@ ui <- (
                             than others, or if they tend to be killed in states where they might be from poorer areas than the state's average. I orginally wanted to merge the table on the 
                             dashboard with this one, but leaflet.minicharts is not very well built out and does not have layering capabilities (through groupping).
                             "
-                         
-                              ),
-                            br(),
-                            h4(strong("Final Words")),
-                            p("If you look into the actual code, you will see I have some commented out, I kept it in, as I might want to revisit some of the features I did not implement in at a later date and wanted to keep the code.
+                            
+                          ),
+                          br(),
+                          h4(strong("Final Words")),
+                          p("If you look into the actual code, you will see I have some commented out, I kept it in, as I might want to revisit some of the features I did not implement in at a later date and wanted to keep the code.
                               I hope you have enjoyed my app!
                             
                             "),
-                            # What is the core concept(s) or insight(s) into the data that you believe the visualization communicates? 
-                            #   If you choose to include animation then explain why animation helps. 
-                            # If you build an app then explain your choice of widgets and what about the data it help users understand
-                            hr()
-                          )),
+                          hr()
+                        )),
+                     #    box(
+                     # ), 
+                        br(),
+                        # hr(),
+                        # fluidRow(
+                        # width = '100%',
+                       
                         # fluidRow(
                         #   # width = '100%',
                         #   box(
@@ -274,7 +290,7 @@ ui <- (
                         # width = 10,
                         # height = 600,
                         leafletOutput("map_map", width = '100%', height = 1075)
-
+                        
                         
                       )
                     )
@@ -407,9 +423,9 @@ server <- (function(input, output, session) {
       hideGroup("Police Killings per State")
   })
   
-
+  
   # Boxes ----------------------------------------------------------------------------
-
+  
   output$unarmed_count <- renderValueBox({
     count_stats <- police_killings %>%
       # filter(month == input$plot.month) %>%
@@ -420,7 +436,7 @@ server <- (function(input, output, session) {
              value = count_stats$unarmed,
              color = "maroon")
   })
-
+  
   
   output$death_count <- renderValueBox({
     count_stats <- police_killings %>%
@@ -445,70 +461,70 @@ server <- (function(input, output, session) {
              color = "blue")
   })
   
-
-
-   # End Value Boxes
-
+  
+  
+  # End Value Boxes
+  
   # Barcharts ------------------------------------------------------------------------------------
-
+  
   output$race_density <- renderPlot({
     xaxisgraph <- police_killings[[input$var]]
     xaxisname <- names(var)[var == input$var]
     
     
-  police_killings %>%
-    ggplot(aes(x = xaxisgraph, fill = raceethnicity)) +
-    geom_density(color = "black") +
-    facet_wrap(~ raceethnicity) +
-    
-    # labs(x = "Age", y = "Density", title = "Age Distribution by Race", fill = "Race / Ethnicity") +
-    labs(
-      x = ifelse(xaxisname == "pov",
-                 "Poverty level in the neighborhood where the person was killed",
-                 ifelse(
-                   xaxisname == "Income",
-                   "Income of the deceased",
+    police_killings %>%
+      ggplot(aes(x = xaxisgraph, fill = raceethnicity)) +
+      geom_density(color = "black") +
+      facet_wrap(~ raceethnicity) +
+      
+      # labs(x = "Age", y = "Density", title = "Age Distribution by Race", fill = "Race / Ethnicity") +
+      labs(
+        x = ifelse(xaxisname == "pov",
+                   "Poverty level in the neighborhood where the person was killed",
                    ifelse(
-                     xaxisname == "pop",
+                     xaxisname == "Income",
                      "Income of the deceased",
-                   "Population size of county where the deceased lived"
-                 ))),
-      # title = ifelse(xaxisname == "pov",
-      #            "Poverty level by Race of deceased",
-      #            ifelse(
-      #              xaxisname == "Income",
-      #              "Income by Race of deceased",
-      #              "Age by Race of deceased"
-      #            )),
-      y = "Density",
-      fill = "Race & Ethnicity",
+                     ifelse(
+                       xaxisname == "pop",
+                       "Income of the deceased",
+                       "Population size of county where the deceased lived"
+                     ))),
+        # title = ifelse(xaxisname == "pov",
+        #            "Poverty level by Race of deceased",
+        #            ifelse(
+        #              xaxisname == "Income",
+        #              "Income by Race of deceased",
+        #              "Age by Race of deceased"
+        #            )),
+        y = "Density",
+        fill = "Race & Ethnicity",
         title = "Demographic information by Race/Ethncity of those killed by the Police"
-      # fill = fillname
-    )+
-    theme_minimal() +
-    scale_fill_brewer(palette = "Blues")+
-    theme(
-      panel.background = element_rect(fill = "white"),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.line = element_line(color = "black"),
-      axis.text = element_blank(),  # Set y-axis text to blank
-      # axis.text = element_text(color = "black"),
-      axis.title = element_text(color = "black"),
-      legend.background = element_rect(fill = "white"),
-      legend.title = element_text(color = "black"),
-      legend.text = element_text(color = "black"),
-      plot.title = element_text(color = "black", size = 14, face = "bold", hjust = 0.5)
-      # Set hjust to 0.5 for center alignment
-    )
+        # fill = fillname
+      )+
+      theme_minimal() +
+      scale_fill_brewer(palette = "Blues")+
+      theme(
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_blank(),  # Set y-axis text to blank
+        # axis.text = element_text(color = "black"),
+        axis.title = element_text(color = "black"),
+        legend.background = element_rect(fill = "white"),
+        legend.title = element_text(color = "black"),
+        legend.text = element_text(color = "black"),
+        plot.title = element_text(color = "black", size = 14, face = "bold", hjust = 0.5)
+        # Set hjust to 0.5 for center alignment
+      )
   })
   
-# End Barcharts
-
-  })
-  # Close --------------------------------------------------------------------
+  # End Barcharts
   
+})
+# Close --------------------------------------------------------------------
 
-                
+
+
 
 shinyApp(ui = ui, server = server)
